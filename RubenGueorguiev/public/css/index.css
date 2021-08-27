@@ -1,0 +1,53 @@
+.custom-cur {
+  cursor: url('/logo.png');
+}
+
+body {
+  background: #0D0FD4;
+  font-family: 'Montserrat', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  touch-action: manipulation;
+}
+
+.title{
+  font-weight: 700;
+  font-family: 'Lexend Zetta', sans-serif;
+}
+
+.dark{
+  color: #212529;
+}
+
+.light{
+  color: #F8F9FA;
+}
+
+.blue{
+  color: #0D0FD4;
+}
+
+.featureTitle{
+  color: #3191ff;
+}
+
+.nounderline {
+  text-decoration: none !important
+}
+
+.card-colour{
+  color: #102b5c;
+}
+
+.bg-1{
+  background: #0D0FD4
+  
+}
+
+.bg-2{
+  background: #000000;
+}
+
+mark{
+  background-color: #ffffff;
+}
