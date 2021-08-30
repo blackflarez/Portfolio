@@ -2,6 +2,12 @@
   cursor: url('/logo.png');
 }
 
+@font-face {
+  font-family: 'Monument';
+  src: url("../fonts/MonumentExtended-Regular.otf");
+  font-style:normal
+}
+
 body {
   background: #0D0FD4;
   font-family: 'Montserrat', sans-serif;
@@ -11,8 +17,14 @@ body {
 }
 
 .title{
+  color: white;
   font-weight: 700;
   font-family: 'Lexend Zetta', sans-serif;
+}
+
+.title:hover{
+  color: #0D0FD4;
+  background-color: white;
 }
 
 .dark{
@@ -40,7 +52,7 @@ body {
 }
 
 .bg-1{
-  background: #0D0FD4
+  background: #2325F1
   
 }
 
