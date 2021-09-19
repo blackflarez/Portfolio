@@ -2,64 +2,73 @@
   cursor: url('/logo.png');
 }
 
-@font-face {
-  font-family: 'Monument';
-  src: url("../fonts/MonumentExtended-Regular.otf");
-  font-style:normal
-}
-
 body {
-  background: #0D0FD4;
+  background: #121212;
   font-family: 'Montserrat', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   touch-action: manipulation;
+  position: relative;
+  overflow-x: hidden;
 }
 
-.title{
+.title {
   color: white;
   font-weight: 700;
   font-family: 'Lexend Zetta', sans-serif;
 }
 
-.title:hover{
-  color: #0D0FD4;
-  background-color: white;
+.link:hover {
+  color: rgba(0, 0, 0, 0.5);
 }
 
-.dark{
+.dark {
   color: #212529;
 }
 
-.light{
-  color: #F8F9FA;
+.light {
+  color: #f8f9fa;
 }
 
-.blue{
-  color: #0D0FD4;
+.blue {
+  color: #0d0fd4;
 }
 
-.featureTitle{
+.featureTitle {
   color: #3191ff;
 }
 
 .nounderline {
-  text-decoration: none !important
+  text-decoration: none !important;
 }
 
-.card-colour{
+.card-colour {
   color: #102b5c;
 }
 
-.bg-1{
-  background: #2325F1
-  
+.bg-1 {
+  background: #2325f1;
 }
 
-.bg-2{
+.bg-2 {
   background: #000000;
 }
 
-mark{
+mark {
   background-color: #ffffff;
+}
+
+.hide {
+  display: none;
+}
+
+.card:hover .hide {
+  display: block;
+}
+
+.canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -100;
 }
