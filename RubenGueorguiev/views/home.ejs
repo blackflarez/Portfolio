@@ -6,7 +6,8 @@
 
       <div class="my-5 pb-2 row">
         <div class="col">
-          <h1 class="fw-bold fs-3 my-5 ">Hi, I'm Ruben Gueorguiev.<br> I study Software Developement at AUT. <br>
+          <h1 class="fw-bold fs-3 my-5 ">Hi, I'm Ruben Gueorguiev.<br> I'm currently studying Software Developement at
+            AUT. <br> Check out what I've worked on!
         </div>
       </div>
 
@@ -95,7 +96,7 @@
       renderer = new THREE.WebGLRenderer()
 
       renderer.setPixelRatio(window.devicePixelRatio * 0.01)
-      renderer.setSize(window.innerWidth, document.documentElement.scrollHeight)
+      renderer.setSize(document.documentElement.scrollWidth, document.documentElement.scrollHeight)
       renderer.antialias = true
       renderer.gammaOutput = true
       renderer.gammaFactor = 2.2
@@ -160,9 +161,9 @@
     window.addEventListener('resize', onWindowResize, false)
     function onWindowResize() {
 
-      camera.aspect = window.innerWidth / document.documentElement.scrollHeight
-      renderer.setSize(window.innerWidth, document.documentElement.scrollHeight)
-      composer.setSize(window.innerWidth, document.documentElement.scrollHeight)
+      camera.aspect = document.documentElement.scrollWidth / document.documentElement.scrollHeight
+      renderer.setSize(document.documentElement.scrollWidth, document.documentElement.scrollHeight)
+      composer.setSize(document.documentElement.scrollWidth, document.documentElement.scrollHeight)
       camera.updateProjectionMatrix()
     }
 

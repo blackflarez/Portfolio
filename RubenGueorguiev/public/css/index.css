@@ -3,7 +3,7 @@
 }
 
 body {
-  background: #121212;
+  background: #f8f9fa;
   font-family: 'Montserrat', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -13,7 +13,7 @@ body {
 }
 
 .title {
-  color: white;
+  color: #f8f9fa;
   font-weight: 700;
   font-family: 'Lexend Zetta', sans-serif;
 }
