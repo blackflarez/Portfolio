@@ -47,7 +47,7 @@ body {
 }
 
 .bg-1 {
-  background: #2325f1;
+  background: #f8f9fa;
 }
 
 .bg-2 {
@@ -71,4 +71,8 @@ mark {
   top: 0;
   left: 0;
   z-index: -100;
+}
+
+.card {
+  box-shadow: 10px 10px rgba(0, 0, 0, 0.5);
 }
