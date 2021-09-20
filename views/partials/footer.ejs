@@ -87,8 +87,10 @@
     }
 
     window.addEventListener('resize', onWindowResize, false)
-    function onWindowResize() {
+    window.addEventListener('popstate', onWindowResize)
 
+    function onWindowResize() {
+        console.log('test')
         camera.aspect = document.documentElement.scrollWidth / document.documentElement.scrollHeight
         renderer.setSize(document.documentElement.scrollWidth, document.documentElement.scrollHeight)
         composer.setSize(document.documentElement.scrollWidth, document.documentElement.scrollHeight)
