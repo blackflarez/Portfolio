@@ -6,6 +6,9 @@ body {
   touch-action: manipulation;
   position: relative;
   overflow-x: hidden;
+}
+
+.main {
   z-index: 100;
 }
 
@@ -72,4 +75,8 @@ mark {
 
 .card {
   box-shadow: 10px 10px rgba(0, 0, 0, 0.5);
+}
+
+*:focus {
+  outline: 0;
 }

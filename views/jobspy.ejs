@@ -5,24 +5,16 @@
 
             <div class="my-3 pb-2 row">
                 <div class="col">
-
-                    <a class="link nounderline light" href="#">
-                        <h1 class="fw-bold fs-1">JobSpy</h1>
-                    </a>
-
+                    <h1 class="fw-bold fs-1">JobSpy</h1>
                 </div>
-
-
             </div>
-
-
 
             <div class="row">
                 <div class="col-lg-9 my-3">
                     <div class="card border-0 rounded-2">
-                        <img src="images/jobspycover.png" class="card-img" alt="Cola Card">
-                        <div class="card-img-overlay m-2 container row">
-                        </div>
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#jsfrontpage">
+                            <img src="images/jobspycover.png" class="card-img" alt="JobSpy's front page">
+                        </a>
                     </div>
                 </div>
 
@@ -55,12 +47,18 @@
                         </div>
                     </div>
                 </div>
-
-
-
             </div>
         </div>
     </div>
 
+    <div class="modal fade" id="jsfrontpage" tabindex="-1" aria-labelledby="JobSpy's front page" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <img src="images/jobspycover.png" class="card-img" alt="JobSpy's front page">
+                </div>
+            </div>
+        </div>
+    </div>
 
     <%- include('partials/footer'); -%>
