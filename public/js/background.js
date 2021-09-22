@@ -7,7 +7,7 @@ function init() {
   var container = document.getElementById('canvas')
   renderer = new THREE.WebGLRenderer()
 
-  renderer.setPixelRatio(window.devicePixelRatio * 0.01)
+  renderer.setPixelRatio(window.devicePixelRatio * 0.005)
   renderer.setSize(
     document.documentElement.scrollWidth,
     document.documentElement.scrollHeight
@@ -35,6 +35,7 @@ function init() {
   var geometry = new THREE.SphereGeometry(2.9, 15, 7)
 
   //materials
+
   const m = new THREE.ShaderMaterial({
     uniforms: {},
 
@@ -63,6 +64,8 @@ function init() {
       '}',
     ].join('\n'),
   })
+
+  m.alphaTest = true
 
   //meshes
   mesh = new THREE.Mesh(geometry, m)
