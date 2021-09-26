@@ -84,9 +84,10 @@ mark {
 @media (prefers-color-scheme: dark) {
   body {
     background: #121212;
+    color: #f8f9fa;
   }
 
   .canvas {
-    opacity: 0.4;
+    opacity: 0.6;
   }
 }
