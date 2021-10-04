@@ -1,5 +1,5 @@
 body {
-  background: #7f7eff;
+  background: #496ddb;
   font-family: 'Montserrat', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -83,8 +83,7 @@ mark {
 
 @media (prefers-color-scheme: dark) {
   body {
-    background: #111344;
-    color: #f8f9fa;
+    background: #181d27;
   }
 
   .canvas {
