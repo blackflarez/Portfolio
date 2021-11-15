@@ -1,0 +1,68 @@
+<%- include('partials/header'); -%>
+
+    <div class="container text-light px-5 pb-5">
+        <div class=" justify-content-md-center">
+
+            <h1 class="fw-bold fs-1">CubeClicker</h1>
+            <h5>Fullstack Developer</h5>
+            <div class="my-5">
+                <p>CubeClicker is a satisfying mobile game which expands the clicker genre with crafting and an online
+                    marketplace.
+                </p>
+                <p>As the sole developer, CubeClicker is a work in progress passion project of mine. As the title
+                    suggests, it is a
+                    combination of gameplay elements from Idle Clicker games, and Minecraft. I wanted to distil the most
+                    satisfying and addictive elements of these two genres. The main gameplay element is mining, where
+                    you tap or hold the cube to break the block and collect resources of various rarities.
+                </p>
+                <p>
+                    My main goal was to make the game as satisfying as possible. I utlised haptic feedback and physics
+                    animations. I also wanted to make the game approachable. I aimed to keep user
+                    experience as simple as possible, while still offering a wide variety of gameplay elements such as
+                    multipliers, crafting better tools, upgrades, trading with friends and an online marketplace economy
+                    inspired by Runescape's Grand Exchange.
+                </p>
+                <p>
+                    I chose to use Expo because of its cross platform capibilities, only having to write and ship one
+                    app for iOS, Android and web. Naturally, the frontend was written in React Native, and programmed in
+                    JavaScript. I utilised ThreeJS for 3D graphics, and Blender for modelling and animations. And I used
+                    Firebase's authentication and Realtime Database for the backend because of its
+                    ease of use and security features.
+                </p>
+            </div>
+
+            <div class="row py-5">
+                <div class="col-lg-3 mb-3">
+                    <video width="250" height="540" autoplay loop muted>
+                        <source src="images/cubeclicker.mov" type="video/mp4">
+                    </video>
+                    <p class="my-1">CubeClicker on iOS</p>
+                </div>
+
+                <div class="col-lg-9 mb-3">
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#CubeClicker">
+                        <img src="images/cubeclickercover.png" class="img-fluid" alt="JobSpy on mobile">
+                    </a>
+                    <p>CubeClicker on web</p>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="CubeClicker" tabindex="-1" aria-labelledby="CubeClicker on web" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <img src="images/cubeclickercover.png" class="img-fluid" alt="CubeClicker on web">
+            </div>
+        </div>
+    </div>
+
+
+    </div>
+
+
+
+
+    <%- include('partials/footer'); -%>

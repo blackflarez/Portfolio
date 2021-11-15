@@ -20,5 +20,9 @@ app.get('/jobspy', (request, response) => {
   response.render('jobspy')
 })
 
+app.get('/cubeclicker', (request, response) => {
+  response.render('cubeclicker')
+})
+
 const port = 3000
 app.listen(process.env.PORT || port)
