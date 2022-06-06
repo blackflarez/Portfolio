@@ -1,69 +1,10 @@
 body {
-  background: #f8f9fa;
+  background: #121212;
   font-family: 'Montserrat', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   touch-action: manipulation;
-  position: relative;
-  overflow-x: hidden;
-}
-
-.main {
-  z-index: 100;
-}
-
-.title {
-  color: #f8f9fa;
-  font-weight: 700;
-  font-family: 'Lexend Zetta', sans-serif;
-}
-
-.link:hover {
-  color: rgba(0, 0, 0, 0.5);
-}
-
-.dark {
-  color: #212529;
-}
-
-.light {
-  color: #f8f9fa;
-}
-
-.blue {
-  color: #0d0fd4;
-}
-
-.featureTitle {
-  color: #3191ff;
-}
-
-.nounderline {
-  text-decoration: none !important;
-}
-
-.card-colour {
-  color: #102b5c;
-}
-
-.bg-1 {
-  background: #f8f9fa;
-}
-
-.bg-2 {
-  background: #000000;
-}
-
-mark {
-  background-color: #ffffff;
-}
-
-.hide {
-  display: none;
-}
-
-.card:hover .hide {
-  display: block;
+  overflow: hidden;
 }
 
 .canvas {
@@ -71,23 +12,5 @@ mark {
   top: 0;
   left: 0;
   z-index: -100;
-}
-
-.card {
-  box-shadow: 10px 10px rgba(0, 0, 0, 0.5);
-}
-
-*:focus {
-  outline: 0;
-}
-
-@media (prefers-color-scheme: dark) {
-  body {
-    background: #121212;
-    color: #f8f9fa;
-  }
-
-  .canvas {
-    opacity: 0.6;
-  }
+  cursor: none;
 }
