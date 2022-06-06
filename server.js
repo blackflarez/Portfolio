@@ -11,9 +11,5 @@ app.get('/', (request, response) => {
   response.render('home')
 })
 
-app.get('/jobspy', (request, response) => {
-  response.render('jobspy')
-})
-
 const port = 3000
 app.listen(process.env.PORT || 3000)

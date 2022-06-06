@@ -1,76 +1,43 @@
-<%- include('partials/header'); -%>
+<!DOCTYPE html>
+<html>
 
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
+  <title>Ruben Gueorguiev</title>
+  <script language="JavaScript" type="module" src="js/background.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css">
+  <link rel="icon" type="image/png" href="images/favicon.png" />
+  <link rel="stylesheet" href="css/index.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lexend+Zetta&display=swap" rel="stylesheet">
 
-  <div class="container light px-5">
-    <div class=" justify-content-md-center">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/three"></script>
+  <script src="https://unpkg.com/@seregpie/three.text-texture"></script>
+  <script src="https://unpkg.com/@seregpie/three.text-sprite"></script>
+  <script src='https://threejs.org/examples/js/postprocessing/EffectComposer.js'></script>
+  <script src='https://threejs.org/examples/js/postprocessing/RenderPass.js'></script>
+  <script src='https://threejs.org/examples/js/postprocessing/ShaderPass.js'></script>
+  <script src='https://threejs.org/examples/js/shaders/CopyShader.js'></script>
+  <script src="https://threejs.org/examples/js/shaders/LuminosityHighPassShader.js"></script>
+  <script src="https://threejs.org/examples/js/postprocessing/UnrealBloomPass.js"></script>
+  <script src='js/BadTVShader.js'></script>
+  <script src='js/FilmShader.js'></script>
+  <script src='js/RGBShiftShader.js'></script>
 
-      <div class="my-5 pb-2 row">
-        <div class="col">
-          <h1 class="fw-bold fs-3">Hi, I'm Ruben.<br> I'm studying Software Developement at
-            AUT. <br> Check out what I've worked on!</h1>
-        </div>
-      </div>
+</head>
 
-      <hr />
+<body>
+  <div id="canvas" class="canvas"></div>
+</body>
 
-      <div class="row my-5">
-        <div class="col-lg my-2">
-
-          <div class="my-3">
-            <a href="/jobspy" class="link nounderline light m-auto">
-              <span class=" fs-3 fw-bold m-auto">JobSpy</span>
-              <br />
-              <span class="fs-5 fw-light m-auto">Web app</span>
-            </a>
-          </div>
-
-          <div class="my-3">
-            <a href="/jobspy" class="link nounderline light m-auto">
-              <span class=" fs-3 fw-bold m-auto">SE App</span>
-              <br />
-              <span class="fs-5 fw-light m-auto">Web app</span>
-            </a>
-          </div>
-
-          <div class="my-3">
-            <a href="/jobspy" class="link nounderline light m-auto">
-              <span class=" fs-3 fw-bold m-auto">Meddalion</span>
-              <br />
-              <span class="fs-5 fw-light m-auto">Mobile app</span>
-            </a>
-          </div>
-
-          <div class="my-3">
-            <a href="/jobspy" class="link nounderline light m-auto">
-              <span class=" fs-3 fw-bold m-auto">BetterPOS</span>
-              <br />
-              <span class="fs-5 fw-light m-auto">Desktop app</span>
-            </a>
-          </div>
-
-        </div>
-
-        <div class="col-lg my-3">
-          <div class="my-3">
-            <a href="/jobspy" class="link nounderline light m-auto">
-              <span class=" fs-3 fw-bold m-auto">Pangea</span>
-              <br />
-              <span class="fs-5 fw-light m-auto">Web game</span>
-            </a>
-          </div>
-
-          <div class="my-3">
-            <a href="/jobspy" class="link nounderline light m-auto">
-              <span class=" fs-3 fw-bold m-auto">Pettokonpanion</span>
-              <br />
-              <span class="fs-5 fw-light m-auto">Desktop game</span>
-            </a>
-          </div>
-
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <%- include('partials/footer'); -%>
+</html>
