@@ -8,20 +8,34 @@ var mesh,
   rtTexture,
   uniforms,
   quad,
-  mesh,
+  cursor,
   composer,
   renderPass,
   bloomPass,
   badTVPass,
   filmPass,
   rgbPass,
-  time,
+  time
+var textProperties = {
+    alignment: 'left',
+    color: '#ffffff',
+    fontFamily: '"B612 Mono", monospace',
+    fontSize: 24,
+  },
   text,
-  message = "                \nHello, world...\nI'm Ruben.",
-  displayMessage
-var mouse = { x: 0, y: 0 }
+  title,
+  subtitleText
+var button1, button2, button3, button4, button5
+var mouse = { x: 0, y: 0 },
+  raycaster,
+  object,
+  highlighted = []
+var pageHome,
+  pageContact,
+  pageWorks,
+  pages = []
 
-window.mobileAndTabletCheck = function () {
+window.isMobile = function () {
   let check = false
   ;(function (a) {
     if (
@@ -38,6 +52,8 @@ window.mobileAndTabletCheck = function () {
 }
 
 function init() {
+  raycaster = new THREE.Raycaster()
+
   //renderer
   container = document.getElementById('canvas')
   renderer = new THREE.WebGLRenderer()
@@ -50,6 +66,23 @@ function init() {
   //scene
   scene = new THREE.Scene()
   dummyScene = new THREE.Scene()
+  pageHome = new THREE.Group()
+  pageContact = new THREE.Group()
+  pageWorks = new THREE.Group()
+
+  pageContact.visible = false
+  pageWorks.visible = false
+
+  pageHome.name = 'pageHome'
+  pageContact.name = 'pageContact'
+  pageWorks.name = 'pageWorks'
+
+  scene.add(pageHome)
+  scene.add(pageContact)
+  scene.add(pageWorks)
+
+  pages = [pageHome, pageContact, pageWorks]
+
   var scale = 2
   if (window.screen.availWidth < 1080) {
     scale = 1
@@ -134,28 +167,44 @@ function init() {
   dummyScene.add(quad)
 
   var geometry = new THREE.PlaneGeometry(20, 20)
-  var mat1 = new THREE.MeshPhongMaterial({ color: 0xffffff })
+  var mat1 = new THREE.MeshStandardMaterial({ color: 0xffffff })
 
-  mesh = new THREE.Mesh(geometry, mat1)
-  mesh.position.set(0, 100, 100)
-  if (window.mobileAndTabletCheck()) {
-    mesh.visible = false
+  cursor = new THREE.Mesh(geometry, mat1)
+  cursor.position.set(1000, 1000, 0)
+  if (window.isMobile()) {
+    cursor.visible = false
   }
-  scene.add(mesh)
+  cursor.name = 'cursor'
+  scene.add(cursor)
 
-  text = new THREE.TextSprite({
-    alignment: 'left',
-    color: '#ffffff',
-    fontFamily: '"B612 Mono", monospace',
-    fontSize: 32,
-    fontStyle: 'bold',
-  })
+  //text and buttons
+  text = new THREE.TextSprite(textProperties)
+  text.fontSize = 32
+
   text.position.set(
     (-1 * window.innerWidth) / 2 / 6,
-    window.innerHeight / 2 / 6,
-    0
+    window.innerHeight / 2 / 6 + 200,
+    10
   )
+
   scene.add(text)
+  //buttons
+  button1 = new THREE.TextSprite(textProperties)
+  button2 = new THREE.TextSprite(textProperties)
+  button3 = new THREE.TextSprite(textProperties)
+  button4 = new THREE.TextSprite(textProperties)
+  button5 = new THREE.TextSprite(textProperties)
+
+  pageHome.add(Object.create(button1))
+  pageHome.add(Object.create(button2))
+
+  //contact
+  subtitleText = new THREE.TextSprite(textProperties)
+
+  pageContact.add(Object.create(button1))
+  pageContact.add(Object.create(button2))
+  pageContact.add(Object.create(button3))
+  pageContact.add(Object.create(subtitleText))
 
   //postprocessing
   composer = new THREE.EffectComposer(renderer)
@@ -168,8 +217,8 @@ function init() {
   )
   badTVPass = new THREE.ShaderPass(THREE.BadTVShader)
   badTVPass.renderToScreen = true
-  badTVPass.uniforms.distortion.value = 0.125
-  badTVPass.uniforms.distortion2.value = 1.75
+  badTVPass.uniforms.distortion.value = 0.1
+  badTVPass.uniforms.distortion2.value = 1
   badTVPass.uniforms.speed.value = 1
   badTVPass.uniforms.rollSpeed.value = 0
 
@@ -190,17 +239,12 @@ function init() {
   composer.addPass(rgbPass)
 
   //intro
-  var i = 0
-  function typeAnimation() {
-    if (i < message.length) {
-      text.dispose()
-      text.text += message[i]
-      i++
-      setTimeout(typeAnimation, 50 + Math.random() * 150)
-    }
-  }
-  typeAnimation()
+  setPage(null, true)
+
   document.addEventListener('mousemove', onMouseMove, false)
+  document.addEventListener('mousedown', onMouseDown, false)
+  window.addEventListener('resize', onWindowResize, false)
+  window.addEventListener('popstate', onWindowResize)
 }
 
 function animate(time) {
@@ -229,9 +273,6 @@ function render() {
   composer.render()
 }
 
-window.addEventListener('resize', onWindowResize, false)
-window.addEventListener('popstate', onWindowResize)
-
 function onWindowResize() {
   text.position.set(
     (-1 * window.innerWidth) / 2 / 6,
@@ -249,12 +290,179 @@ function onMouseMove(event) {
   event.preventDefault()
   mouse.x = (event.clientX / window.innerWidth) * 2 - 1
   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
-  var vector = new THREE.Vector3(mouse.x, mouse.y, 0.5)
+  var vector = new THREE.Vector3(mouse.x, mouse.y, 0)
   vector.unproject(camera)
   var dir = vector.sub(camera.position).normalize()
   var distance = -camera.position.z / dir.z
   var pos = camera.position.clone().add(dir.multiplyScalar(distance))
-  mesh.position.copy(pos)
+  cursor.position.copy(pos)
+
+  //raycasting
+  raycaster.setFromCamera(mouse, camera)
+
+  var intersects = raycaster.intersectObject(scene, true)
+  if (intersects)
+    if (intersects.length > 0) {
+      object = intersects[0].object
+
+      if (object.name.includes('button')) {
+        cursor.visible = false
+        if (highlighted[1]) {
+          highlighted[0].backgroundColor = 'transparent'
+          highlighted[0].color = '#ffffff'
+          highlighted.shift()
+        }
+        highlighted.push(object)
+        highlighted[0].backgroundColor = '#33fcff'
+        highlighted[0].color = '#000000'
+      } else {
+        cursor.visible = true
+        if (highlighted[0]) {
+          highlighted[0].backgroundColor = 'transparent'
+          highlighted[0].color = '#ffffff'
+          highlighted.shift()
+        }
+      }
+    }
+}
+
+function onMouseDown(event) {
+  event.preventDefault()
+  raycaster.setFromCamera(mouse, camera)
+  var intersects = raycaster.intersectObject(scene, true)
+
+  if (intersects)
+    if (intersects.length > 0) {
+      object = intersects[0].object
+
+      if (object.name.includes('button')) {
+        setPage(object)
+      }
+    }
+}
+
+async function setPage(object, init) {
+  if (init) {
+    object = new THREE.TextSprite(textProperties)
+    object.name = 'buttonHome'
+  }
+
+  if (object.name === 'buttonHome') {
+    await animateTitle("                \nHello, world...\nI'm Ruben.    ")
+    for (let i of pages) {
+      if (i.name === 'pageHome') {
+        for (let e of i.children) {
+          e.dispose()
+        }
+        button1.text = 'Contact >       '
+        button2.text = 'Selected Works >'
+
+        button1.name = 'buttonContact'
+        button2.name = 'buttonWorks'
+
+        button1.fontWeight = 'bold'
+        button2.fontWeight = 'bold'
+
+        button1.position.set(
+          (-1 * window.innerWidth) / 2 / 6,
+          window.innerHeight / 2 / 6,
+          10
+        )
+
+        button2.position.set(
+          (-1 * window.innerWidth) / 2 / 6,
+          window.innerHeight / 2 / 6 - 50,
+          10
+        )
+
+        i.visible = true
+        i.position.set(0, 0, 0)
+      } else {
+        //i.visible = false
+        // i.position.set(-2000, -2000, -2000)
+      }
+    }
+  }
+  if (object.name === 'buttonContact') {
+    await animateTitle('                \nContact.    ')
+    for (let i of pages) {
+      if (i.name === 'pageContact') {
+        subtitleText.text = 'Ruben Gueorguiev'
+        button1.text = 'Email >         '
+        button2.text = 'GitHub >         '
+        button3.text = 'LinkedIn >       '
+
+        button1.name = 'buttonEmail'
+        button2.name = 'buttonGitHub'
+        button3.name = 'buttonLinkedIn'
+
+        button1.fontWeight = 'bold'
+        button2.fontWeight = 'bold'
+        button3.fontWeight = 'bold'
+
+        subtitleText.position.set(
+          (-1 * window.innerWidth) / 2 / 6,
+          window.innerHeight / 2 / 6,
+          10
+        )
+        button1.position.set(
+          (-1 * window.innerWidth) / 2 / 6,
+          window.innerHeight / 2 / 6 - 50,
+          10
+        )
+        button2.position.set(
+          (-1 * window.innerWidth) / 2 / 6,
+          window.innerHeight / 2 / 6 - 100,
+          10
+        )
+        button3.position.set(
+          (-1 * window.innerWidth) / 2 / 6,
+          window.innerHeight / 2 / 6 - 150,
+          10
+        )
+
+        i.visible = true
+        i.position.set(0, 0, 0)
+      } else {
+        // i.visible = false
+        // i.position.set(-2000, -2000, -2000)
+      }
+    }
+
+    subtitleText.text = 'Ruben Gueorguiev'
+  }
+}
+
+function animateTitle(title, promise) {
+  //Add loading wheel
+  cursor.material.side = THREE.BackSide
+  badTVPass.uniforms.distortion.value = 5
+  rgbPass.uniforms.amount.value = 0.05
+
+  return new Promise((resolve) => {
+    for (let i of pages) {
+      for (let e of i.children) {
+        e.text = ''
+      }
+    }
+
+    text.text = ''
+    var i = 0
+    function typeAnimation() {
+      if (i < title.length) {
+        text.dispose()
+        text.text += title[i]
+        i++
+        setTimeout(typeAnimation, 25 + Math.random() * 100)
+      } else {
+        badTVPass.uniforms.distortion.value = 0.1
+        rgbPass.uniforms.amount.value = 0.002
+        cursor.material.side = THREE.FrontSide
+        resolve(promise)
+      }
+    }
+    typeAnimation()
+  })
 }
 
 init()
