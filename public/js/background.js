@@ -15,7 +15,8 @@ var mesh,
   badTVPass,
   filmPass,
   rgbPass,
-  time
+  time,
+  motif
 var textProperties = {
     alignment: 'left',
     color: '#ffffff',
@@ -33,7 +34,8 @@ var mouse = { x: 0, y: 0 },
 var pageHome,
   pageContact,
   pageWorks,
-  pages = []
+  pages = [],
+  currentPage
 
 window.isMobile = function () {
   let check = false
@@ -83,9 +85,9 @@ function init() {
 
   pages = [pageHome, pageContact, pageWorks]
 
-  var scale = 2
+  var scale = 2.5
   if (window.screen.availWidth < 1080) {
-    scale = 1
+    scale = 1.25
   }
   rtTexture = new THREE.WebGLRenderTarget(
     window.innerWidth / scale, //resolution x
@@ -161,6 +163,15 @@ function init() {
   scene.add(new THREE.AmbientLight(0xffffff, 2))
 
   //geometry
+
+  motif = new THREE.Mesh(
+    new THREE.SphereGeometry(256, 8, 8),
+    new THREE.MeshBasicMaterial({ color: 0x0015ff, wireframe: true })
+  )
+  motif.position.set(250, 300, -400)
+
+  scene.add(Object.create(motif))
+
   var plane = new THREE.PlaneGeometry(window.innerWidth, window.innerHeight)
   quad = new THREE.Mesh(plane, materialScreen)
   quad.position.z = -100
@@ -176,6 +187,16 @@ function init() {
   }
   cursor.name = 'cursor'
   scene.add(cursor)
+
+  var background = new THREE.Mesh(
+    new THREE.PlaneGeometry(9999, 9999),
+    new THREE.MeshBasicMaterial({ color: 0x121212 })
+  )
+  background.position.set(0, 0, -5000)
+  background.rotation.set(0, 0, Math.PI / 2)
+  for (let i of pages) {
+    i.add(Object.create(background))
+  }
 
   //text and buttons
   text = new THREE.TextSprite(textProperties)
@@ -200,10 +221,12 @@ function init() {
 
   //contact
   subtitleText = new THREE.TextSprite(textProperties)
+  subtitleText.fontSize = 28
 
   pageContact.add(Object.create(button1))
   pageContact.add(Object.create(button2))
   pageContact.add(Object.create(button3))
+  pageContact.add(Object.create(button4))
   pageContact.add(Object.create(subtitleText))
 
   //postprocessing
@@ -211,9 +234,9 @@ function init() {
   renderPass = new THREE.RenderPass(dummyScene, dummyCamera)
   bloomPass = new THREE.UnrealBloomPass(
     new THREE.Vector2(window.innerWidth, window.innerHeight),
-    1,
-    0.5,
-    0.5
+    0.6,
+    0.1,
+    0.2
   )
   badTVPass = new THREE.ShaderPass(THREE.BadTVShader)
   badTVPass.renderToScreen = true
@@ -248,6 +271,7 @@ function init() {
 }
 
 function animate(time) {
+  motif.rotation.y += 0.001
   time *= 0.001
   badTVPass.uniforms['time'].value = time
   filmPass.uniforms['time'].value = time
@@ -298,47 +322,63 @@ function onMouseMove(event) {
   cursor.position.copy(pos)
 
   //raycasting
-  raycaster.setFromCamera(mouse, camera)
+  if (!window.isMobile() && currentPage) {
+    raycaster.setFromCamera(mouse, camera)
 
-  var intersects = raycaster.intersectObject(scene, true)
-  if (intersects)
-    if (intersects.length > 0) {
-      object = intersects[0].object
+    var intersects = raycaster.intersectObject(currentPage, true)
+    if (intersects)
+      if (intersects.length > 0) {
+        object = intersects[0].object
 
-      if (object.name.includes('button')) {
-        cursor.visible = false
-        if (highlighted[1]) {
-          highlighted[0].backgroundColor = 'transparent'
-          highlighted[0].color = '#ffffff'
-          highlighted.shift()
-        }
-        highlighted.push(object)
-        highlighted[0].backgroundColor = '#33fcff'
-        highlighted[0].color = '#000000'
-      } else {
-        cursor.visible = true
-        if (highlighted[0]) {
-          highlighted[0].backgroundColor = 'transparent'
-          highlighted[0].color = '#ffffff'
-          highlighted.shift()
+        if (object.name.includes('button') || object.name.includes('link')) {
+          cursor.visible = false
+          if (highlighted[1]) {
+            highlighted[0].backgroundColor = 'transparent'
+            highlighted[0].color = '#ffffff'
+            highlighted.shift()
+          }
+          highlighted.push(object)
+          highlighted[0].backgroundColor = '#33ff5f'
+          highlighted[0].color = '#000000'
+        } else {
+          cursor.visible = true
+          if (highlighted[0]) {
+            highlighted[0].backgroundColor = 'transparent'
+            highlighted[0].color = '#ffffff'
+            highlighted.shift()
+          }
         }
       }
-    }
+  }
 }
 
 function onMouseDown(event) {
   event.preventDefault()
-  raycaster.setFromCamera(mouse, camera)
-  var intersects = raycaster.intersectObject(scene, true)
 
-  if (intersects)
-    if (intersects.length > 0) {
-      object = intersects[0].object
+  if (currentPage) {
+    raycaster.setFromCamera(mouse, camera)
+    var intersects = raycaster.intersectObject(currentPage, true)
 
-      if (object.name.includes('button')) {
-        setPage(object)
+    if (intersects)
+      if (intersects.length > 0) {
+        object = intersects[0].object
+
+        if (object.name.includes('button')) {
+          setPage(object)
+        } else if (object.name.includes('link')) {
+          if (object.name === 'linkEmail') {
+            window.location.href = 'mailto:rubengueorguiev@gmail.com'
+          } else if (object.name === 'linkGitHub') {
+            window.open('https://github.com/blackflarez', '_blank')
+          } else if (object.name === 'linkLinkedIn') {
+            window.open(
+              'https://www.linkedin.com/in/ruben-gueorguiev-1bb0151b8/',
+              '_blank'
+            )
+          }
+        }
       }
-    }
+  }
 }
 
 async function setPage(object, init) {
@@ -350,12 +390,24 @@ async function setPage(object, init) {
   if (object.name === 'buttonHome') {
     await animateTitle("                \nHello, world...\nI'm Ruben.    ")
     for (let i of pages) {
-      if (i.name === 'pageHome') {
-        for (let e of i.children) {
+      for (let e of i.children) {
+        if (e.isTextSprite) {
           e.dispose()
         }
-        button1.text = 'Contact >       '
-        button2.text = 'Selected Works >'
+      }
+      if (i.name === 'pageHome') {
+        currentPage = pageHome
+        i.visible = true
+        i.position.set(0, 0, 0)
+
+        motif.geometry = new THREE.SphereGeometry(256, 8, 8)
+        motif.material = new THREE.MeshBasicMaterial({
+          color: 0x0015ff,
+          wireframe: true,
+        })
+
+        button1.text = 'Contact ▸       '
+        button2.text = 'Selected Works ▸'
 
         button1.name = 'buttonContact'
         button2.name = 'buttonWorks'
@@ -374,31 +426,46 @@ async function setPage(object, init) {
           window.innerHeight / 2 / 6 - 50,
           10
         )
-
-        i.visible = true
-        i.position.set(0, 0, 0)
       } else {
         //i.visible = false
-        // i.position.set(-2000, -2000, -2000)
+        //i.position.set(-2000, -2000, -1000)
       }
     }
   }
   if (object.name === 'buttonContact') {
     await animateTitle('                \nContact.    ')
     for (let i of pages) {
+      for (let e of i.children) {
+        if (e.isTextSprite) {
+          e.dispose()
+        }
+      }
       if (i.name === 'pageContact') {
-        subtitleText.text = 'Ruben Gueorguiev'
-        button1.text = 'Email >         '
-        button2.text = 'GitHub >         '
-        button3.text = 'LinkedIn >       '
+        currentPage = pageContact
+        i.visible = true
+        i.position.set(0, 0, 0)
 
-        button1.name = 'buttonEmail'
-        button2.name = 'buttonGitHub'
-        button3.name = 'buttonLinkedIn'
+        motif.geometry = new THREE.TorusKnotBufferGeometry(256, 24, 4, 5, 2, 3)
+        motif.material = new THREE.MeshBasicMaterial({
+          color: 0xff9100,
+          wireframe: true,
+        })
+
+        subtitleText.text = 'Ruben Gueorguiev'
+        button1.text = 'Email ▸         '
+        button2.text = 'GitHub ▸        '
+        button3.text = 'LinkedIn ▸      '
+        button4.text = '◂ Back      '
+
+        button1.name = 'linkEmail'
+        button2.name = 'linkGitHub'
+        button3.name = 'linkLinkedIn'
+        button4.name = 'buttonHome'
 
         button1.fontWeight = 'bold'
         button2.fontWeight = 'bold'
         button3.fontWeight = 'bold'
+        button4.fontWeight = 'bold'
 
         subtitleText.position.set(
           (-1 * window.innerWidth) / 2 / 6,
@@ -420,12 +487,14 @@ async function setPage(object, init) {
           window.innerHeight / 2 / 6 - 150,
           10
         )
-
-        i.visible = true
-        i.position.set(0, 0, 0)
+        button4.position.set(
+          (-1 * window.innerWidth) / 2 / 6,
+          window.innerHeight / 2 / 6 - 250,
+          10
+        )
       } else {
-        // i.visible = false
-        // i.position.set(-2000, -2000, -2000)
+        //i.visible = false
+        //i.position.set(-2000, -2000, -1000)
       }
     }
 
@@ -434,10 +503,10 @@ async function setPage(object, init) {
 }
 
 function animateTitle(title, promise) {
-  //Add loading wheel
   cursor.material.side = THREE.BackSide
   badTVPass.uniforms.distortion.value = 5
-  rgbPass.uniforms.amount.value = 0.05
+  badTVPass.uniforms.distortion2.value = 2
+  rgbPass.uniforms.amount.value = 0.99
 
   return new Promise((resolve) => {
     for (let i of pages) {
@@ -453,9 +522,10 @@ function animateTitle(title, promise) {
         text.dispose()
         text.text += title[i]
         i++
-        setTimeout(typeAnimation, 25 + Math.random() * 100)
+        setTimeout(typeAnimation, 5 + Math.random() * 100)
       } else {
         badTVPass.uniforms.distortion.value = 0.1
+        badTVPass.uniforms.distortion2.value = 1
         rgbPass.uniforms.amount.value = 0.002
         cursor.material.side = THREE.FrontSide
         resolve(promise)
