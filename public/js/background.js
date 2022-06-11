@@ -16,7 +16,8 @@ var mesh,
   filmPass,
   rgbPass,
   time,
-  motif
+  motif,
+  background
 var textProperties = {
     alignment: 'left',
     color: '#ffffff',
@@ -36,6 +37,7 @@ var pageHome,
   pageWorks,
   pages = [],
   currentPage
+var imageMesh, jobspymobile
 
 window.isMobile = function () {
   let check = false
@@ -85,7 +87,7 @@ function init() {
 
   pages = [pageHome, pageContact, pageWorks]
 
-  var scale = 2.5
+  var scale = 2
   if (window.screen.availWidth < 1080) {
     scale = 1.25
   }
@@ -160,10 +162,17 @@ function init() {
   dummyCamera.position.z = 1
 
   //lights
-  scene.add(new THREE.AmbientLight(0xffffff, 2))
+  scene.add(new THREE.AmbientLight(0xffffff, 0.35))
+
+  //images
+  const texture = new THREE.TextureLoader().load('images/jobspycover.png')
+  jobspymobile = new THREE.MeshStandardMaterial({
+    map: texture,
+    color: 0xeeeeee,
+  })
+  imageMesh = new THREE.Mesh(new THREE.PlaneGeometry(500, 500), jobspymobile)
 
   //geometry
-
   motif = new THREE.Mesh(
     new THREE.SphereGeometry(256, 8, 8),
     new THREE.MeshBasicMaterial({ color: 0x0015ff, wireframe: true })
@@ -178,7 +187,7 @@ function init() {
   dummyScene.add(quad)
 
   var geometry = new THREE.PlaneGeometry(20, 20)
-  var mat1 = new THREE.MeshStandardMaterial({ color: 0xffffff })
+  var mat1 = new THREE.MeshBasicMaterial({ color: 0xffffff })
 
   cursor = new THREE.Mesh(geometry, mat1)
   cursor.position.set(1000, 1000, 0)
@@ -188,7 +197,7 @@ function init() {
   cursor.name = 'cursor'
   scene.add(cursor)
 
-  var background = new THREE.Mesh(
+  background = new THREE.Mesh(
     new THREE.PlaneGeometry(9999, 9999),
     new THREE.MeshBasicMaterial({ color: 0x121212 })
   )
@@ -229,6 +238,16 @@ function init() {
   pageContact.add(Object.create(button4))
   pageContact.add(Object.create(subtitleText))
 
+  //selectworks
+  subtitleText = new THREE.TextSprite(textProperties)
+  subtitleText.fontSize = 28
+
+  pageWorks.add(Object.create(button1))
+  pageWorks.add(Object.create(button2))
+  pageWorks.add(Object.create(button3))
+  pageWorks.add(Object.create(subtitleText))
+  pageWorks.add(Object.create(imageMesh))
+
   //postprocessing
   composer = new THREE.EffectComposer(renderer)
   renderPass = new THREE.RenderPass(dummyScene, dummyCamera)
@@ -247,7 +266,7 @@ function init() {
 
   filmPass = new THREE.ShaderPass(THREE.FilmShader)
   filmPass.uniforms.grayscale.value = 0
-  filmPass.uniforms.sCount.value = 1024
+  filmPass.uniforms.sCount.value = 2048
   filmPass.uniforms.sIntensity.value = 0.05
   filmPass.uniforms.nIntensity.value = 0.4
 
@@ -388,7 +407,11 @@ async function setPage(object, init) {
   }
 
   if (object.name === 'buttonHome') {
-    await animateTitle("                \nHello, world...\nI'm Ruben.    ")
+    await animateTitle(
+      "                \nHello, world...\nI'm Ruben.    ",
+      init
+    )
+
     for (let i of pages) {
       for (let e of i.children) {
         if (e.isTextSprite) {
@@ -426,14 +449,10 @@ async function setPage(object, init) {
           window.innerHeight / 2 / 6 - 50,
           10
         )
-      } else {
-        //i.visible = false
-        //i.position.set(-2000, -2000, -1000)
       }
     }
-  }
-  if (object.name === 'buttonContact') {
-    await animateTitle('                \nContact.    ')
+  } else if (object.name === 'buttonContact') {
+    await animateTitle('                \nContact.    ', init)
     for (let i of pages) {
       for (let e of i.children) {
         if (e.isTextSprite) {
@@ -489,20 +508,67 @@ async function setPage(object, init) {
         )
         button4.position.set(
           (-1 * window.innerWidth) / 2 / 6,
-          window.innerHeight / 2 / 6 - 250,
+          window.innerHeight / 2 / 6 - 300,
           10
         )
-      } else {
-        //i.visible = false
-        //i.position.set(-2000, -2000, -1000)
       }
     }
+  } else if (object.name === 'buttonWorks') {
+    await animateTitle('                \nSelected Works.    ', init)
+    for (let i of pages) {
+      for (let e of i.children) {
+        if (e.isTextSprite) {
+          e.dispose()
+        }
+      }
+      if (i.name === 'pageWorks') {
+        currentPage = pageWorks
+        i.visible = true
+        i.position.set(0, 0, 0)
 
-    subtitleText.text = 'Ruben Gueorguiev'
+        motif.geometry = new THREE.BoxGeometry(256, 256, 256)
+        motif.material = new THREE.MeshBasicMaterial({
+          color: 0xff9100,
+          wireframe: true,
+        })
+
+        background.material = THREE.MeshBasicMaterial({ color: 0xffffff })
+
+        subtitleText.text = 'JobSpy'
+        button1.text = ' ◂ '
+        button2.text = ' ▸ '
+        button3.text = '◂ Back      '
+
+        button1.name = 'buttonNext'
+        button2.name = 'buttonBack'
+        button3.name = 'buttonHome'
+
+        button1.fontWeight = 'bold'
+        button2.fontWeight = 'bold'
+        button3.fontWeight = 'bold'
+
+        subtitleText.position.set(
+          (-1 * window.innerWidth) / 2 / 6,
+          window.innerHeight / 2 / 6,
+          -350
+        )
+        button1.position.set(-200, window.innerHeight / 2 / 6 - 350, 10)
+        button2.position.set(200, window.innerHeight / 2 / 6 - 350, 10)
+        button3.position.set(
+          (-1 * window.innerWidth) / 2 / 6,
+          window.innerHeight / 2 / 6 - 400,
+          10
+        )
+      }
+    }
   }
 }
 
-function animateTitle(title, promise) {
+function animateTitle(title, init, promise) {
+  var typingSpeed = 1
+  if (init) {
+    typingSpeed = 100
+  }
   cursor.material.side = THREE.BackSide
   badTVPass.uniforms.distortion.value = 5
   badTVPass.uniforms.distortion2.value = 2
@@ -522,7 +588,7 @@ function animateTitle(title, promise) {
         text.dispose()
         text.text += title[i]
         i++
-        setTimeout(typeAnimation, 5 + Math.random() * 100)
+        setTimeout(typeAnimation, 5 + Math.random() * typingSpeed)
       } else {
         badTVPass.uniforms.distortion.value = 0.1
         badTVPass.uniforms.distortion2.value = 1
