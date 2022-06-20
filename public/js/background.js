@@ -317,12 +317,6 @@ function render() {
 }
 
 function onWindowResize() {
-  text.position.set(
-    (-1 * window.innerWidth) / 2 / 6,
-    window.innerHeight / 2 / 6,
-    0
-  )
-
   renderer.setSize(window.innerWidth, window.innerHeight)
   composer.setSize(window.innerWidth, window.innerHeight)
   camera.aspect = window.innerWidth / window.innerHeight
