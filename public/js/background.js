@@ -83,7 +83,7 @@ function init() {
 
   scene.add(pageHome)
   scene.add(pageContact)
-  scene.add(pageWorks)
+  //scene.add(pageWorks)
 
   pages = [pageHome, pageContact, pageWorks]
 
@@ -226,7 +226,7 @@ function init() {
   button5 = new THREE.TextSprite(textProperties)
 
   pageHome.add(Object.create(button1))
-  pageHome.add(Object.create(button2))
+  //pageHome.add(Object.create(button2))
 
   //contact
   subtitleText = new THREE.TextSprite(textProperties)
@@ -424,13 +424,13 @@ async function setPage(object, init) {
         })
 
         button1.text = 'Contact ▸       '
-        button2.text = 'Selected Works ▸'
+        //button2.text = 'Selected Works ▸'
 
         button1.name = 'buttonContact'
-        button2.name = 'buttonWorks'
+        //button2.name = 'buttonWorks'
 
         button1.fontWeight = 'bold'
-        button2.fontWeight = 'bold'
+        //button2.fontWeight = 'bold'
 
         button1.position.set(
           (-1 * window.innerWidth) / 2 / 6,
@@ -438,11 +438,11 @@ async function setPage(object, init) {
           10
         )
 
-        button2.position.set(
-          (-1 * window.innerWidth) / 2 / 6,
-          window.innerHeight / 2 / 6 - 50,
-          10
-        )
+        // button2.position.set(
+        //   (-1 * window.innerWidth) / 2 / 6,
+        //   window.innerHeight / 2 / 6 - 50,
+        //   10
+        // )
       }
     }
   } else if (object.name === 'buttonContact') {
