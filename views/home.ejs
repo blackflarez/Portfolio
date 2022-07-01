@@ -1,40 +1,38 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+    <title>Ruben Gueorguiev</title>
+    <script language="JavaScript" type="module" src="js/background.js"></script>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, user-scalable=no" />
-  <title>Ruben Gueorguiev</title>
-  <script language="JavaScript" type="module" src="js/background.js"></script>
+    <link rel="icon" type="image/png" href="images/favicon.png" />
+    <link rel="stylesheet" href="css/index.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=VT323&display=swap"
+      rel="stylesheet"
+    />
 
+    <script src="https://unpkg.com/three"></script>
+    <script src="https://unpkg.com/@seregpie/three.text-texture"></script>
+    <script src="https://unpkg.com/@seregpie/three.text-sprite"></script>
+    <script src="https://threejs.org/examples/js/postprocessing/EffectComposer.js"></script>
+    <script src="https://threejs.org/examples/js/postprocessing/RenderPass.js"></script>
+    <script src="https://threejs.org/examples/js/postprocessing/ShaderPass.js"></script>
+    <script src="https://threejs.org/examples/js/shaders/CopyShader.js"></script>
+    <script src="https://threejs.org/examples/js/shaders/LuminosityHighPassShader.js"></script>
+    <script src="https://threejs.org/examples/js/postprocessing/UnrealBloomPass.js"></script>
 
-  <link rel="icon" type="image/png" href="images/favicon.png" />
-  <link rel="stylesheet" href="css/index.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=B612+Mono&display=swap" rel="stylesheet">
+    <script src="js/BadTVShader.js"></script>
+    <script src="js/FilmShader.js"></script>
+    <script src="js/RGBShiftShader.js"></script>
+  </head>
 
-
-  <script src="https://unpkg.com/three"></script>
-  <script src="https://unpkg.com/@seregpie/three.text-texture"></script>
-  <script src="https://unpkg.com/@seregpie/three.text-sprite"></script>
-  <script src='https://threejs.org/examples/js/postprocessing/EffectComposer.js'></script>
-  <script src='https://threejs.org/examples/js/postprocessing/RenderPass.js'></script>
-  <script src='https://threejs.org/examples/js/postprocessing/ShaderPass.js'></script>
-  <script src='https://threejs.org/examples/js/shaders/CopyShader.js'></script>
-  <script src="https://threejs.org/examples/js/shaders/LuminosityHighPassShader.js"></script>
-  <script src="https://threejs.org/examples/js/postprocessing/UnrealBloomPass.js"></script>
-
-  <script src='js/BadTVShader.js'></script>
-  <script src='js/FilmShader.js'></script>
-  <script src='js/RGBShiftShader.js'></script>
-
-</head>
-
-<body>
-  <div id="container">
-    <div id="canvas" class="canvas"></div>
-  </div>
-</body>
-
+  <body>
+    <div id="container">
+      <div id="canvas" class="canvas"></div>
+    </div>
+  </body>
 </html>
