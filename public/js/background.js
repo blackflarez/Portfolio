@@ -6,6 +6,7 @@ var primaryColour = '#39ff14',
   currentTheme = 'default'
 var mesh,
   renderer,
+  renderScale,
   scene,
   dummyScene,
   camera,
@@ -101,13 +102,13 @@ function initScene() {
 
   pages = [pageHome, pageContact]
 
-  var scale = 2
+  renderScale = 2
   if (window.screen.availWidth < 1080) {
-    scale = 1.25
+    renderScale = 1.25
   }
   rtTexture = new THREE.WebGLRenderTarget(
-    window.innerWidth / scale, //resolution x
-    window.innerHeight / scale, //resolution y
+    window.innerWidth / renderScale, //resolution x
+    window.innerHeight / renderScale, //resolution y
     {
       minFilter: THREE.LinearFilter,
       magFilter: THREE.NearestFilter,
@@ -223,14 +224,9 @@ function initScene() {
 
   //text and buttons
   text = new THREE.TextSprite(textProperties)
-  text.fontSize = 42
+  text.fontSize = 54
   text.fontWeight = 'bold'
-
-  text.position.set(
-    (-1 * window.innerWidth) / 2 / 6 - 25,
-    window.innerHeight / 2 / 6 + 200,
-    10
-  )
+  text.position.set(-30, 200, 10)
 
   scene.add(text)
   //buttons
@@ -239,6 +235,12 @@ function initScene() {
   button3 = new THREE.TextSprite(textProperties)
   button4 = new THREE.TextSprite(textProperties)
   button5 = new THREE.TextSprite(textProperties)
+
+  button1.position.set(-35, 0, 10)
+  button2.position.set(-35, -75, 10)
+  button3.position.set(-35, -150, 10)
+  button4.position.set(-35, -225, 10)
+  button5.position.set(-35, -300, 10)
 
   pageHome.add(Object.create(button1))
   pageHome.add(Object.create(button2))
@@ -313,6 +315,10 @@ function render() {
 }
 
 function onWindowResize() {
+  rtTexture.setSize(
+    window.innerWidth / renderScale,
+    window.innerHeight / renderScale
+  )
   renderer.setSize(window.innerWidth, window.innerHeight)
   composer.setSize(window.innerWidth, window.innerHeight)
   camera.aspect = window.innerWidth / window.innerHeight
@@ -429,20 +435,6 @@ async function setPage(object, init) {
 
         button1.name = 'buttonContact'
         button2.name = 'buttonTheme'
-
-        //button1.fontWeight = 'bold'
-        // button2.fontWeight = 'bold'
-
-        button1.position.set(
-          (-1 * window.innerWidth) / 2 / 6 - 25,
-          window.innerHeight / 2 / 6 - 50,
-          10
-        )
-        button2.position.set(
-          (-1 * window.innerWidth) / 2 / 6 - 25,
-          window.innerHeight / 2 / 6 - 125,
-          10
-        )
       }
     }
   } else if (object.name === 'buttonContact') {
@@ -473,32 +465,6 @@ async function setPage(object, init) {
         button2.name = 'linkGitHub'
         button3.name = 'linkLinkedIn'
         button4.name = 'buttonHome'
-
-        //button1.fontWeight = 'bold'
-        //button2.fontWeight = 'bold'
-        //button3.fontWeight = 'bold'
-        //button4.fontWeight = 'bold'
-
-        button1.position.set(
-          (-1 * window.innerWidth) / 2 / 6 - 25,
-          window.innerHeight / 2 / 6 - 50,
-          10
-        )
-        button2.position.set(
-          (-1 * window.innerWidth) / 2 / 6 - 25,
-          window.innerHeight / 2 / 6 - 125,
-          10
-        )
-        button3.position.set(
-          (-1 * window.innerWidth) / 2 / 6 - 25,
-          window.innerHeight / 2 / 6 - 200,
-          10
-        )
-        button4.position.set(
-          (-1 * window.innerWidth) / 2 / 6 - 25,
-          window.innerHeight / 2 / 6 - 300,
-          10
-        )
       }
     }
   }
