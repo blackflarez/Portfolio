@@ -25,8 +25,8 @@ var mesh,
   time,
   motif,
   background
-var textProperties, text, title, subtitleText
-
+var textProperties, text, title, subtitleText, time
+var date
 var button1, button2, button3, button4, button5
 var mouse = { x: 0, y: 0 },
   raycaster,
@@ -245,6 +245,10 @@ function initScene() {
   pageHome.add(Object.create(button1))
   pageHome.add(Object.create(button2))
 
+  time = new THREE.TextSprite(textProperties)
+  time.position.set(0, 380, 10)
+  scene.add(time)
+
   //contact
   subtitleText = new THREE.TextSprite(textProperties)
   subtitleText.fontSize = 28
@@ -297,6 +301,13 @@ function animate(time) {
   uniforms.iTime.value = time
   requestAnimationFrame(animate)
   render()
+  setDate()
+}
+
+function setDate() {
+  date = new Date()
+  time.dispose()
+  time.text = date.toLocaleTimeString('en-US')
 }
 
 function render() {
