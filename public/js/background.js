@@ -103,11 +103,7 @@ function initScene() {
 
   pages = [pageHome, pageContact]
 
-  renderScale = 2
-  if (window.screen.availWidth < 1080) {
-    renderScale = 1.25
-  }
-  console.log(window.screen.availWidth)
+  renderScale = (window.innerWidth / 1000) * 1.5
   rtTexture = new THREE.WebGLRenderTarget(
     window.innerWidth / renderScale, //resolution x
     window.innerHeight / renderScale, //resolution y
@@ -333,6 +329,8 @@ function render() {
 }
 
 function onWindowResize() {
+  renderScale = (window.innerWidth / 1000) * 1.5
+  console.log(renderScale)
   rtTexture.setSize(
     window.innerWidth / renderScale,
     window.innerHeight / renderScale
@@ -378,7 +376,6 @@ function onMouseMove(event) {
           object.name.includes('link') ||
           object.name.includes('tool')
         ) {
-          console.log('a')
           cursor.visible = false
           if (highlighted[1]) {
             highlighted[0].backgroundColor = 'transparent'
@@ -505,8 +502,6 @@ function randomiseTheme() {
   if (index < themes.length) {
     nextTheme = themes[index]
   }
-
-  console.log(nextTheme)
   currentTheme = nextTheme
   changeTheme(nextTheme)
   initScene()
