@@ -2,7 +2,7 @@ var primaryColour = '#39ff14',
   primaryColourHex = 0x39ff14,
   secondaryColour = '#33FF5F',
   backgroundColourHex = 0x121212,
-  themes = ['default', 'amber', 'pink'],
+  themes = ['default', 'amber', 'pink', 'blue'],
   currentTheme = 'default'
 var mesh,
   renderer,
@@ -22,12 +22,13 @@ var mesh,
   badTVPass,
   filmPass,
   rgbPass,
-  time,
   motif,
-  background
-var textProperties, text, title, subtitleText, time
+  background,
+  width = 800,
+  height = 600
+var textProperties, text, title, subtitleText, time, topBar
 var date
-var button1, button2, button3, button4, button5
+var button1, button2, button3, button4, button5, toolButton1
 var mouse = { x: 0, y: 0 },
   raycaster,
   object,
@@ -106,6 +107,7 @@ function initScene() {
   if (window.screen.availWidth < 1080) {
     renderScale = 1.25
   }
+  console.log(window.screen.availWidth)
   rtTexture = new THREE.WebGLRenderTarget(
     window.innerWidth / renderScale, //resolution x
     window.innerHeight / renderScale, //resolution y
@@ -200,6 +202,7 @@ function initScene() {
   motif.position.set(300, 300, -400)
 
   scene.add(Object.create(motif))
+  motif.visible = false
 
   var geometry = new THREE.PlaneGeometry(20, 20)
   var mat1 = new THREE.MeshBasicMaterial({ color: primaryColourHex })
@@ -222,50 +225,54 @@ function initScene() {
     i.add(Object.create(background))
   }
 
-  //text and buttons
+  //text
   text = new THREE.TextSprite(textProperties)
   text.fontSize = 54
   text.fontWeight = 'bold'
   text.position.set(-30, 200, 10)
 
   scene.add(text)
+
   //buttons
   button1 = new THREE.TextSprite(textProperties)
   button2 = new THREE.TextSprite(textProperties)
   button3 = new THREE.TextSprite(textProperties)
   button4 = new THREE.TextSprite(textProperties)
   button5 = new THREE.TextSprite(textProperties)
+  topBar = new THREE.TextSprite({
+    color: primaryColour,
+    fontSize: 30,
+  })
+  toolButton1 = new THREE.TextSprite(textProperties)
+  time = new THREE.TextSprite(textProperties)
+  time.visible = false
 
   button1.position.set(-35, 0, 10)
   button2.position.set(-35, -75, 10)
   button3.position.set(-35, -150, 10)
   button4.position.set(-35, -225, 10)
   button5.position.set(-35, -300, 10)
+  topBar.position.set(-0.5, 399, -2)
+  toolButton1.position.set(-350, 388, 10)
+  time.position.set(360, 388, 10)
 
   pageHome.add(Object.create(button1))
   pageHome.add(Object.create(button2))
-
-  time = new THREE.TextSprite(textProperties)
-  time.position.set(0, 380, 10)
-  scene.add(time)
-
-  //contact
-  subtitleText = new THREE.TextSprite(textProperties)
-  subtitleText.fontSize = 28
-
-  pageContact.add(Object.create(button1))
-  pageContact.add(Object.create(button2))
-  pageContact.add(Object.create(button3))
-  pageContact.add(Object.create(button4))
+  pageHome.add(Object.create(button3))
+  //pageHome.add(Object.create(button4))
+  pageHome.add(Object.create(toolButton1))
+  pageHome.add(Object.create(topBar))
+  pageHome.add(Object.create(toolButton1))
+  pageHome.add(Object.create(time))
 
   //postprocessing
   composer = new THREE.EffectComposer(renderer)
   renderPass = new THREE.RenderPass(dummyScene, dummyCamera)
   bloomPass = new THREE.UnrealBloomPass(
     new THREE.Vector2(window.innerWidth, window.innerHeight),
-    0.6,
+    0.4,
     0.1,
-    0.2
+    0.6
   )
   badTVPass = new THREE.ShaderPass(THREE.BadTVShader)
   badTVPass.renderToScreen = true
@@ -334,6 +341,16 @@ function onWindowResize() {
   composer.setSize(window.innerWidth, window.innerHeight)
   camera.aspect = window.innerWidth / window.innerHeight
   camera.updateProjectionMatrix()
+  for (let e of pageHome.children) {
+    if (e.isTextSprite) {
+      e.dispose()
+    }
+  }
+  for (let e of scene.children) {
+    if (e.isTextSprite) {
+      e.dispose()
+    }
+  }
 }
 
 function onMouseMove(event) {
@@ -356,14 +373,18 @@ function onMouseMove(event) {
       if (intersects.length > 0) {
         object = intersects[0].object
 
-        if (object.name.includes('button') || object.name.includes('link')) {
+        if (
+          object.name.includes('button') ||
+          object.name.includes('link') ||
+          object.name.includes('tool')
+        ) {
+          console.log('a')
           cursor.visible = false
           if (highlighted[1]) {
             highlighted[0].backgroundColor = 'transparent'
             highlighted[0].color = primaryColour
             highlighted.shift()
           }
-
           highlighted.push(object)
           highlighted[0].backgroundColor = secondaryColour
           highlighted[0].color = '#000000'
@@ -371,7 +392,12 @@ function onMouseMove(event) {
           cursor.visible = true
           if (highlighted[0]) {
             highlighted[0].backgroundColor = 'transparent'
-            highlighted[0].color = primaryColour
+            if (highlighted[0].name.includes('tool')) {
+              highlighted[0].color = '#000'
+            } else {
+              highlighted[0].color = primaryColour
+            }
+
             highlighted.shift()
           }
         }
@@ -390,12 +416,12 @@ function onMouseDown(event) {
       if (intersects.length > 0) {
         object = intersects[0].object
 
+        if (object.name.includes('toolOptions')) {
+          randomiseTheme()
+        }
+
         if (object.name.includes('button')) {
-          if (object.name == 'buttonTheme') {
-            randomiseTheme()
-          } else {
-            setPage(object)
-          }
+          setPage(object)
         } else if (object.name.includes('link')) {
           if (object.name === 'linkEmail') {
             window.location.href = 'mailto:rubengueorguiev@gmail.com'
@@ -430,38 +456,30 @@ async function setPage(object, init) {
           e.dispose()
         }
       }
+
       if (i.name === 'pageHome') {
+        motif.visible = true
+        time.visible = true
         currentPage = pageHome
         i.visible = true
         i.position.set(0, 0, 0)
 
+        //UI
+        topBar.text = '█'.repeat(19)
+        topBar.fontSize = 48
+
+        toolButton1.text = 'Change Theme'
+        toolButton1.name = 'toolOptions'
+        toolButton1.fontSize = 32
+        toolButton1.color = '#000'
+        toolButton1.fontWeight = 'bold'
+        toolButton1.padding = 0.2
+
+        time.fontSize = 32
+        time.color = '#000'
+        time.fontWeight = 'bold'
+
         motif.geometry = new THREE.SphereGeometry(256, 8, 8)
-        motif.material = new THREE.MeshBasicMaterial({
-          color: primaryColourHex,
-          wireframe: true,
-        })
-
-        button1.text = 'Contact ▸       '
-        button2.text = 'Change Theme ▸  '
-
-        button1.name = 'buttonContact'
-        button2.name = 'buttonTheme'
-      }
-    }
-  } else if (object.name === 'buttonContact') {
-    await animateTitle('                \nContact.    ', init)
-    for (let i of pages) {
-      for (let e of i.children) {
-        if (e.isTextSprite) {
-          e.dispose()
-        }
-      }
-      if (i.name === 'pageContact') {
-        currentPage = pageContact
-        i.visible = true
-        i.position.set(0, 0, 0)
-
-        motif.geometry = new THREE.TorusKnotBufferGeometry(256, 24, 4, 5, 2, 3)
         motif.material = new THREE.MeshBasicMaterial({
           color: primaryColourHex,
           wireframe: true,
@@ -470,12 +488,12 @@ async function setPage(object, init) {
         button1.text = 'E-mail ▸        '
         button2.text = 'GitHub ▸        '
         button3.text = 'LinkedIn ▸      '
-        button4.text = 'Back ◂          '
+        //button4.text = 'Portfolio ▸     '
 
         button1.name = 'linkEmail'
         button2.name = 'linkGitHub'
         button3.name = 'linkLinkedIn'
-        button4.name = 'buttonHome'
+        //button4.name = 'buttonPortfolio'
       }
     }
   }
@@ -497,14 +515,19 @@ function randomiseTheme() {
 
 function changeTheme(theme) {
   if (theme == 'pink') {
-    primaryColour = '#FF01FF'
-    primaryColourHex = 0xff01ff
+    primaryColour = '#EE5DFF'
+    primaryColourHex = 0xee5dff
     secondaryColour = '#FF74F1'
-    backgroundColourHex = 0x1100ff
+    backgroundColourHex = 0x0b00bc
   } else if (theme == 'amber') {
     primaryColour = '#EC8B1F'
     primaryColourHex = 0xec8b1f
     secondaryColour = '#FFEC12'
+    backgroundColourHex = 0x121212
+  } else if (theme == 'blue') {
+    primaryColour = '#82D9FF'
+    primaryColourHex = 0x82d9ff
+    secondaryColour = '#82D9FF'
     backgroundColourHex = 0x121212
   } else {
     primaryColour = '#39ff14'
@@ -515,14 +538,14 @@ function changeTheme(theme) {
 }
 
 function animateTitle(title, init, promise) {
-  var typingSpeed = 2
+  var typingSpeed = 0.1
   if (init) {
     typingSpeed = 80
   }
   cursor.material.side = THREE.BackSide
-  badTVPass.uniforms.distortion.value = 3
-  badTVPass.uniforms.distortion2.value = 4
-  rgbPass.uniforms.amount.value = 0.1
+  badTVPass.uniforms.distortion.value = 1
+  badTVPass.uniforms.distortion2.value = 3
+  rgbPass.uniforms.amount.value = 0.01
 
   return new Promise((resolve) => {
     for (let i of pages) {
