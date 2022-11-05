@@ -8,6 +8,8 @@ import SmashBlock from './pages/SmashBlock'
 import JobSpy from './pages/JobSpy'
 import Pettokonpanion from './pages/Pettokonpanion'
 import Blank from './pages/Blank'
+import NftGo from './pages/NftGo'
+
 import './App.css'
 
 export default function App() {
@@ -15,6 +17,7 @@ export default function App() {
     <BrowserRouter>
       <Switch>
         <Route exact path="/" component={Home} />
+        <Route exact path="/nftgo" component={NftGo} />
         <Route exact path="/dasher" component={Dasher} />
         <Route exact path="/projectpos" component={ProjectPos} />
         <Route exact path="/vxttest" component={VxtTest} />

@@ -11,17 +11,9 @@ function Pettokonpanion() {
             <Button title="←" href="/" sameTab={true} />
             <h1 className="title">Pettokonpanion</h1>
           </div>
-          <p>A mini Java based game inspired by Tamagotchi.</p>
           <div>
             <p className="pill2">Java</p>
             <p className="pill2">Photoshop</p>
-          </div>
-
-          <div style={{ alignSelf: 'flex-end', marginTop: 30 }}>
-            <Button
-              title="View on GitHub"
-              href="https://github.com/blackflarez/Pettokonpanion"
-            />
           </div>
         </div>
       </header>
@@ -30,8 +22,8 @@ function Pettokonpanion() {
 
       <p>
         A Tamagotchi clone, but it lives on your desktop. Feet, pat and clean
-        your pet to keep it happy and alive. Created for a second year
-        university project.
+        your pet to keep it happy and alive. Created for Programming 2 - Object
+        Oriented Programming at AUT.
       </p>
 
       <h2 className="title">Development</h2>

@@ -10,10 +10,7 @@ function VxtTest() {
             <Button title="←" href="/" sameTab={true} />
             <h1 className="title">VxtTest</h1>
           </div>
-          <p>
-            First place for the Vxt Virtual Competition; automating the testing
-            of Vxt infrastructure in a handy web interface.
-          </p>
+
           <div>
             <p className="pill2">React</p>
             <p className="pill2">NodeJS + Express</p>
@@ -34,21 +31,11 @@ function VxtTest() {
         Tests include backend testing, utilising a server and APIs to test
         various calls and flows from Vxt's phones and our own phones. Tests also
         include frontend testing, using Selenium to automate functionality such
-        as searches and logging in.
+        as searches and logging in. I was mainly responsible for frontend
+        development and integration.
       </p>
 
       <h2 className="title">Development</h2>
-
-      <p>
-        Initially, our main hurdle was understanding the technologies and APIs
-        required. But once we (sort of) got over that, our concern was
-        differenciating ourselves from the other teams.
-        <br />
-        <br />
-        This is when I thought to create a web based frontend, where tests could
-        easily be accessed in a simple user interface, rather than tediously
-        typing them all in a CLI.
-      </p>
 
       <div className="imageContainer">
         <div style={{ width: '100%' }}>

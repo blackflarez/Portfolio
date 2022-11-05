@@ -23,7 +23,16 @@ function Home() {
         </div>
       </header>
 
-      <h2 className="title">Work in progress</h2>
+      <h2 className="title">Featured projects</h2>
+
+      <h3 className="green year">2022</h3>
+
+      <Card
+        href="/nftgo"
+        title="NFT GO"
+        category="Blockchain Experience"
+        description="A Geolocation/Augmented Reality experience, allowing participants to find hidden NFT treasures around New Zealand."
+      />
 
       <Card
         href="/dasher"
@@ -32,17 +41,6 @@ function Home() {
         description="An accessible real-time air qualtity monitoring dashboard app for
             communities around New Zealand."
       />
-
-      <Card
-        href="/projectpos"
-        title="ProjectPOS"
-        category="Mobile Development"
-        description="An intiutive Point of Sale for restaurant businesses."
-      />
-
-      <h2 className="title">Featured projects</h2>
-
-      <h3>2022</h3>
 
       <Card
         href="/vxttest"
@@ -55,12 +53,12 @@ function Home() {
       <Card
         href="/smashblock"
         title="SmashBlock"
-        category="Game Development"
+        category="Mobile Game Development"
         description="A fun mobile clicker game with satisfying haptics and destruction
           physics."
       />
 
-      <h3>2021</h3>
+      <h3 className="green year">2021</h3>
 
       <Card
         href="/jobspy"
@@ -70,7 +68,7 @@ function Home() {
           presents them in one simple website."
       />
 
-      <h3>2020</h3>
+      <h3 className="green year">2020</h3>
       <Card
         href="/pettokonpanion"
         title="Pettokonpanion"
